@@ -7,20 +7,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint_python:
-    name: Lint Python (flake8)
+  Lint_Python_Files:
+    name: Lint Python Files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Install flake8
         run: pip install flake8
-
-      - name: Lint Django app with flake8
+      - name: Lint Python with flake8
         run: flake8 --exclude=migrations server/djangoapp
+
+  Lint_JavaScript_Files:
+    name: Lint JavaScript Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install jshint
+        run: npm install -g jshint
+      - name: Lint JavaScript with jshint
+        run: jshint --config server/database/.jshintrc server/database/app.js server/database/dealership.js server/database/review.js server/database/inventory.js

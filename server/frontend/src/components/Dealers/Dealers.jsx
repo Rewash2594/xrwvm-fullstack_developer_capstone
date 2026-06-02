@@ -6,17 +6,15 @@ import review_icon from "../assets/reviewicon.png"
 
 const Dealers = () => {
   const [dealersList, setDealersList] = useState([]);
-  // let [state, setState] = useState("")
   let [states, setStates] = useState([])
 
-  // let root_url = window.location.origin
   let dealer_url ="/djangoapp/get_dealers";
-  
-  let dealer_url_by_state = "/djangoapp/get_dealers/";
- 
+
   const filterDealers = async (state) => {
-    dealer_url_by_state = dealer_url_by_state+state;
-    const res = await fetch(dealer_url_by_state, {
+    let url = "/djangoapp/get_dealers/" + state;
+    // Reflejar el filtro de estado en la barra de direcciones
+    window.history.pushState({}, "", "/dealers?state=" + state);
+    const res = await fetch(url, {
       method: "GET"
     });
     const retobj = await res.json();
@@ -44,7 +42,7 @@ const Dealers = () => {
   }
   useEffect(() => {
     get_dealers();
-  },[]);  
+  },[]);
 
 
 let isLoggedIn = sessionStorage.getItem("username") != null ? true : false;
@@ -66,7 +64,7 @@ return(
       {states.map(state => (
           <option value={state}>{state}</option>
       ))}
-      </select>        
+      </select>
 
       </th>
       {isLoggedIn ? (
@@ -83,7 +81,7 @@ return(
           <td>{dealer['zip']}</td>
           <td>{dealer['state']}</td>
           {isLoggedIn ? (
-            <td><a href={`/postreview/${dealer['id']}`}><img src={review_icon} className="review_icon" alt="Post Review"/></a></td>
+            <td><a href={`/postreview/${dealer['id']}`}><img src={review_icon} className="review_icon" alt="Review Dealer"/> Review Dealer</a></td>
            ):<></>
           }
         </tr>
